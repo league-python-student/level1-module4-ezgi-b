@@ -64,9 +64,9 @@ class Board:
         for i in range(3):
             total = 0
             for j in range(3):
-                if self.board[j][i] == 'X':
+                if self.board[j][i].s == 'X':
                     total += 1
-                if self.board[j][i] =='O':
+                if self.board[j][i].s =='O':
                     total += -1
             if total == -3:
                 return 'O'
@@ -77,9 +77,9 @@ class Board:
     def check_diagonal(self):
         total = 0
         for i in range(3):
-            if self.board[i][i] == 'X':
+            if self.board[i][i].s == 'X':
                 total += 1
-            if self.board[i][i] =='O':
+            if self.board[i][i].s =='O':
                 total += -1
         if total == -3:
             return 'O'
@@ -87,9 +87,9 @@ class Board:
             return 'X'
         total = 0
         for i in range(3):
-            if self.board[2-i][2-i] == 'X':
+            if self.board[2-i][2-i].s == 'X':
                 total += 1
-            if self.board[2-i][2-i] =='O':
+            if self.board[2-i][2-i].s =='O':
                 total += -1
         if total == -3:
             return 'O'
@@ -98,8 +98,9 @@ class Board:
         return '-'
         
     def check_winner(self):
-        if check_horizontal() == 'X' or check_vertical() == 'X' or check_diagonal() == 'X':
+        print("check")
+        if self.check_horizontal() == 'X' or self.check_vertical() == 'X' or self.check_diagonal() == 'X':
             return "X"
-        if check_horizontal() == 'O' or check_vertical() == 'O' or check_diagonal() == 'O':
+        if self.check_horizontal() == 'O' or self.check_vertical() == 'O' or self.check_diagonal() == 'O':
             return "O"
         return '-'
