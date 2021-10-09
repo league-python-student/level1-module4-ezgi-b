@@ -4,6 +4,8 @@ Create a memory match game!
 import random
 import time
 import tkinter as tk
+from tkinter import messagebox
+
 
 # TODO: First, run this code. You should see a grid with 52 buttons.
 #   Your task is to:
@@ -33,13 +35,13 @@ class MemoryMatch(tk.Tk):
         buttons_per_row = MemoryMatch.TOTAL_BUTTONS / 4
         button_width, button_height = self.setup_buttons(buttons_per_row)
         self.dictionary = dict()
+        self.buttons_pressed = list()
         numbers_used = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         for i in range(MemoryMatch.TOTAL_BUTTONS):
             row_num = int(i / buttons_per_row)
             col_num = int(i % buttons_per_row)
             row_y = row_num * button_height
             col_x = col_num * button_width
-
             button = tk.Button(self, text='', fg='black', font=('arial', 24, 'bold'))
             button.place(x=col_x, y=row_y, width=button_width, height=button_height)
             button.bind('<ButtonPress>', self.on_button_press)
@@ -48,16 +50,40 @@ class MemoryMatch(tk.Tk):
                 rand = random.randint(1, 13)
             numbers_used[rand - 1] += 1
             self.dictionary[button] = rand
-
+        self.matches = 0
+        self.matches_label = tk.Label(self, text='Matches: 0', font=('arial', 36, 'bold'))
+        self.matches_label.place(x=0, y=MemoryMatch.HEIGHT)
+        self.attempts = 0
+        self.attempts_label = tk.Label(self, text='Attempts: 0', font=('arial', 36, 'bold'))
+        self.attempts_label.place(x=400, y=MemoryMatch.HEIGHT)
 
     def on_button_press(self, event):
         button_pressed = event.widget
-        print('Button ' + str(button_pressed) + ' was pressed') + " " + str(self.dictionary[button_pressed])
+        button_pressed.configure(text=str(self.dictionary[button_pressed]))
+        if not self.buttons_pressed.__contains__(button_pressed) and not button_pressed['state'] == tk.DISABLED:
+            self.buttons_pressed.append(button_pressed)
+        if len(self.buttons_pressed) == 2:
+            if self.dictionary[self.buttons_pressed[0]] == self.dictionary[self.buttons_pressed[1]]:
+                self.buttons_pressed[0].configure(state=tk.DISABLED, text=self.dictionary[self.buttons_pressed[0]])
+                self.buttons_pressed[1].configure(state=tk.DISABLED, text=self.dictionary[self.buttons_pressed[1]])
+                self.buttons_pressed.clear()
+                self.matches += 1
+            self.attempts += 1
+        if len(self.buttons_pressed) == 3:
+            self.buttons_pressed[0].configure(text='')
+            self.buttons_pressed[1].configure(text='')
+            self.buttons_pressed.clear()
+            self.buttons_pressed.append(button_pressed)
 
-        if button_pressed['state'] == tk.DISABLED:
-            button_pressed.configure(state=tk.NORMAL, text='ON')
-        elif button_pressed['state'] == tk.NORMAL:
-            button_pressed.configure(state=tk.DISABLED, text='OFF')
+        self.matches_label.configure(text='Matches: ' + str(self.matches))
+        self.attempts_label.configure(text='Attempts: ' + str(self.attempts))
+        if self.matches == 26:
+            messagebox.showinfo(None, message="Congratulations! You won!")
+
+        #if button_pressed['state'] == tk.DISABLED:
+        #    button_pressed.configure(state=tk.NORMAL, text='ON')
+        #elif button_pressed['state'] == tk.NORMAL:
+        #    button_pressed.configure(state=tk.DISABLED, text='OFF')
 
     def setup_buttons(self, buttons_per_row):
         # Window size needs to be updated immediately here so the
@@ -71,6 +97,7 @@ class MemoryMatch(tk.Tk):
 
         button_width = int(self.winfo_width() / buttons_per_row)
         button_height = int(self.winfo_height() / num_rows)
+        self.geometry('%sx%s' % (MemoryMatch.WIDTH, MemoryMatch.HEIGHT + 100))
 
         return button_width, button_height
 
