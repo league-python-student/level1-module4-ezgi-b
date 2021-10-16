@@ -44,3 +44,28 @@ word_anagrams = {
     "unreal": ["neural"],
     "wonderful": ["underflow"],
     "zeal": ["laze"]}
+
+
+class Anagrams(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.guesses = 5
+        self.guesses_label = tk.Label(self, text="bljglref")
+        self.guesses_label.place(relx=0.5, rely=0.5, relwidth=0.3, relheight=0.3)
+        self.instructions = tk.Label(self, text="")
+        self.word_label = tk.Label(self, text="")
+        self.word = ""
+        self.new_word = tk.Button(self, text="Get New Word!")
+        self.guess_box = tk.Entry(self)
+        self.guess_box.place(relx=0.1, rely=0.1, relwidth=0.3, relheight=0.3)
+        self.guess_box.bind("<KeyPress>")
+
+
+if __name__ == '__main__':
+    AnnaGram = Anagrams()
+    AnnaGram.geometry("500x200")
+    AnnaGram.mainloop()
+
+
+
+

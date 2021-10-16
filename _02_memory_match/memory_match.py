@@ -78,7 +78,7 @@ class MemoryMatch(tk.Tk):
         self.matches_label.configure(text='Matches: ' + str(self.matches))
         self.attempts_label.configure(text='Attempts: ' + str(self.attempts))
         if self.matches == 26:
-            messagebox.showinfo(None, message="Congratulations! You won!")
+            messagebox.showinfo(None, message="Congratulations! You won! Your score is " + str(self.matches*100-self.attempts*20))
 
         #if button_pressed['state'] == tk.DISABLED:
         #    button_pressed.configure(state=tk.NORMAL, text='ON')
