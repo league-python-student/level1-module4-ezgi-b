@@ -49,16 +49,34 @@ word_anagrams = {
 class Anagrams(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.guesses = 5
-        self.guesses_label = tk.Label(self, text="bljglref")
-        self.guesses_label.place(relx=0.5, rely=0.5, relwidth=0.3, relheight=0.3)
-        self.instructions = tk.Label(self, text="")
-        self.word_label = tk.Label(self, text="")
-        self.word = ""
+        self.guesses_remaining = 5
+        self.guesses_remaining_label = tk.Label(self, text="Guesses Remaining:   " + str(self.guesses_remaining), font=('arial', 12))
+        self.guesses_remaining_label.place(relx=0, rely=0.4, relwidth=0.4, relheight=0.3)
+        self.guesses = list()
+        self.guesses_label = tk.Label(self, text="testest")
+        self.guesses_label.place(relx=0, rely=0.8, relwidth=1, relheight=0.1)
+        self.words_used = list()
+        self.instructions = tk.Label(self, text="Guess the # anagram(s) for the word: ")
+        self.instructions.place(relx=0, rely=0, relwidth=0.54, relheight=0.3)
+        self.word_label = tk.Label(self, text=self.word)
+        self.word = self.rand_word()
+        self.word_label.place(relx=0.5, rely=0, relwidth=0.2, relheight=0.3)
         self.new_word = tk.Button(self, text="Get New Word!")
+        self.new_word.bind("<KeyPress>", self.rand_word)
+        self.new_word.place(relx=0.7, rely=0.03, relwidth=0.25, relheight=0.2)
         self.guess_box = tk.Entry(self)
-        self.guess_box.place(relx=0.1, rely=0.1, relwidth=0.3, relheight=0.3)
-        self.guess_box.bind("<KeyPress>")
+        self.guess_box.place(relx=0.5, rely=0.45, relwidth=0.3, relheight=0.2)
+
+    def rand_word(self):
+        size = len(word_anagrams)
+        rand = random.randint(0, size-1)
+        word = list(word_anagrams)[rand]
+        while word in self.words_used:
+            rand = random.randint(0, size - 1)
+            word = list(word_anagrams)[rand]
+        self.words_used.append(word)
+        self.word_label.configure(self, text=word)
+        return word
 
 
 if __name__ == '__main__':
